@@ -1,22 +1,33 @@
 package com.cdhgold.topmeet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
-import com.cdhgold.topmeet.util.Util;
+import com.cdhgold.topmeet.Fragm.MnewFragment;
+import com.cdhgold.topmeet.util.PreferenceManager;
 
-public class MainActivity extends AppCompatActivity {
+//회원
+public class MainActivity extends AppCompatActivity    {
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private MnewFragment newmember = new MnewFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = Util.md5(android_id).toUpperCase();
-        Log.i("device id=",deviceId);
+        setContentView(R.layout.member_fragm);
+        /* 첫 화면 지정 - 회원가입여부 확인후 , 화면 전환
+            deviceid 로 등록여붛확인 : 서버통신
+         */
+        String deviceid = PreferenceManager.getString(this, "DEVICEID");// device id
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.infoFrameLayout, newmember).commitAllowingStateLoss();
 
     }
+
 }
