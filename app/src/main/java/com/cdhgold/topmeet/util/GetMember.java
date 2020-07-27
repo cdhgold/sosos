@@ -11,14 +11,14 @@ import java.net.URL;
 /*
 HttpURLConnection 서버통신
  */
-public class GetData extends Thread {
+public class GetMember extends Thread {
     URL url;
     Document doc = null;
     HttpURLConnection conn;
     InputStreamReader isr;
 
     private Context context;
-    public GetData(Context ctx){
+    public GetMember(Context ctx){
         this.context = ctx;
     }
     public void run() {

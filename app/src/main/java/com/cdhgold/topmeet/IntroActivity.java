@@ -10,7 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cdhgold.topmeet.util.PreferenceManager;
 import com.cdhgold.topmeet.util.Util;
-
+/*
+intro
+deviceid를 확인한다.
+회원등록여부에 따라 화면 전환한다.
+ */
 public class IntroActivity extends AppCompatActivity {
 
     @Override
