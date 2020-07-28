@@ -5,12 +5,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.cdhgold.topmeet.Fragm.MnewFragment;
 import com.cdhgold.topmeet.util.GetMember;
 import com.cdhgold.topmeet.util.PreferenceManager;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 /*
 회원가입여부에따라 화면 분기
  */
@@ -28,8 +32,24 @@ public class MainActivity extends AppCompatActivity    {
          */
         String deviceid = PreferenceManager.getString(this, "DEVICEID");// device id
         //서버통신 회원유무확인
-        GetMember gm = new GetMember(this);
-        gm.start();
+        String ret = "";
+        GetMember callable = new GetMember(this);
+        FutureTask futureTask = new FutureTask(callable);
+        Thread thread = new Thread(futureTask);
+        thread.start();
+        try {
+            ret = (String)futureTask.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.i("thread", "2===========end " +ret );
+        if(!"".equals(ret)){// 회원
+
+        }else{  // 비회원
+
+        }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.infoFrameLayout, newmember).commitAllowingStateLoss();
 
