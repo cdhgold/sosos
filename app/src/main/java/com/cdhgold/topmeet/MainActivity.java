@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.cdhgold.topmeet.Fragm.MnewFragment;
+import com.cdhgold.topmeet.Fragm.MoldFragment;
 import com.cdhgold.topmeet.util.GetMember;
 import com.cdhgold.topmeet.util.PreferenceManager;
 
@@ -22,6 +23,7 @@ import java.util.concurrent.FutureTask;
 public class MainActivity extends AppCompatActivity    {
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private MnewFragment newmember = new MnewFragment();
+    private MoldFragment oldmember = new MoldFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +47,12 @@ public class MainActivity extends AppCompatActivity    {
             e.printStackTrace();
         }
         Log.i("thread", "2===========end " +ret );
-        if(!"".equals(ret)){// 회원
-
-        }else{  // 비회원
-
-        }
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.infoFrameLayout, newmember).commitAllowingStateLoss();
+        if(!"".equals(ret)){// 회원
+            transaction.replace(R.id.infoFrameLayout, oldmember).commitAllowingStateLoss();
+        }else{  // 비회원
+            transaction.replace(R.id.infoFrameLayout, newmember).commitAllowingStateLoss();
+        }
 
     }
 

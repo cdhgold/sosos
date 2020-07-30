@@ -14,16 +14,16 @@ import com.cdhgold.topmeet.R;
 
 
 /*
-  신규 회원가입 fragment
+  등록 멤버 처음화면
  */
-public class MnewFragment extends Fragment  implements View.OnClickListener {
+public class MoldFragment extends Fragment  implements View.OnClickListener {
 
     private View view;
     ImageButton btn  ;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_main, container, false);
+        view = inflater.inflate(R.layout.mem_old, container, false);
 
         //최초 앱설치한사람은 회원가입요청
         btn = (ImageButton)view.findViewById(R.id.btnMember);
@@ -36,7 +36,6 @@ public class MnewFragment extends Fragment  implements View.OnClickListener {
     {
         switch (view.getId()) {
             case R.id.btnMember: // 회원가입
-
 
                 break;
 
