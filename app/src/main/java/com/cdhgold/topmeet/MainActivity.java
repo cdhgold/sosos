@@ -1,6 +1,7 @@
 package com.cdhgold.topmeet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -54,6 +55,12 @@ public class MainActivity extends AppCompatActivity    {
             transaction.replace(R.id.infoFrameLayout, newmember).commitAllowingStateLoss();
         }
 
+    }
+
+    //fragment 전환
+    public void replaceFragment(Fragment fragment ) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.infoFrameLayout,  fragment).commitAllowingStateLoss();
     }
 
 }

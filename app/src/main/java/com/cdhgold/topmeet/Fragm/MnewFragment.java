@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.cdhgold.topmeet.MainActivity;
 import com.cdhgold.topmeet.R;
 
 
@@ -20,6 +21,7 @@ public class MnewFragment extends Fragment  implements View.OnClickListener {
 
     private View view;
     ImageButton btn  ;
+    private MregiFragment mregif = new MregiFragment();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,6 +38,8 @@ public class MnewFragment extends Fragment  implements View.OnClickListener {
     {
         switch (view.getId()) {
             case R.id.btnMember: // 회원가입
+                ((MainActivity)getActivity()).replaceFragment(mregif);
+
 
 
                 break;
