@@ -1,5 +1,8 @@
 package com.cdhgold.topmeet.util;
 
+import android.app.AlertDialog;
+import android.content.Context;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,5 +22,11 @@ public class Util {
         catch (UnsupportedEncodingException e) { e.printStackTrace(); MD5 = null; }
         return MD5;
     }
+    public static void showAlim(String nm, Context ctx) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        builder.setTitle("Top1%");
+        builder.setMessage(nm );
 
+        builder.show();
+    }
 }
