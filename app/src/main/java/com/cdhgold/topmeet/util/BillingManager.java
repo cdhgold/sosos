@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -14,6 +15,8 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.cdhgold.topmeet.Fragm.MnewFragment;
+import com.cdhgold.topmeet.Fragm.MregiFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +29,21 @@ public class BillingManager implements PurchasesUpdatedListener {
     // 초기화 시 입력 받거나 생성되는 멤버 변수들.
     private BillingClient mBillingClient;
     private Activity mActivity;
+    private MregiFragment mFrag;
     private ConsumeResponseListener mConsumResListnere; // 소비 관련
     // 현재 접속 상태를 나타 냅니다.
     public enum connectStatusTypes { waiting, connected, fail, disconnected }
     public connectStatusTypes connectStatus = connectStatusTypes.waiting;
     // 결제를 위해 가지온 상품 정보를 저장한 변수 입니다.
     public List<SkuDetails> mSkuDetailsList;
-    SkuDetails skuDetails_Member = null; // 회원가입 item
-    SkuDetails skuDetails_car = null;
+    SkuDetails sku_member;
     // 생성자.
-    public BillingManager( Activity _activity )
+    public BillingManager( Activity _activity, MregiFragment _frg )
     {
-
+        SkuDetails skuDetails_Member ;
         // 초기화 시 입력 받은 값들을 넣어 줍니다.
         mActivity = _activity;
+        mFrag = _frg;
         Log.d(TAG, "구글 결제 매니저를 초기화 하고 있습니다.");
         // 결제를 위한, 빌링 클라이언트를 생성합니다.
         mBillingClient = BillingClient.newBuilder(mActivity).setListener(this).build();
@@ -59,7 +63,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
                 // 접속이 실패한 경우, 처리.
                 else {
-
+                    get_Sku_Detail_List();
                     connectStatus = connectStatusTypes.fail;
                     Log.d(TAG, "구글 결제 서버 접속에 실패하였습니다.\n오류코드:" + responseCode);
                 }
@@ -142,11 +146,10 @@ public class BillingManager implements PurchasesUpdatedListener {
                             SkuDetails _skuDetail = skuDetailsList.get( _sku_index );
                             String inappId = _skuDetail.getSku();// 결제제품 ID
                             if("p_member".equals(inappId) ){
-                                skuDetails_Member = _skuDetail;
+                                sku_member = _skuDetail;
                             }
                             // 해당 인덱스의 상품 정보를 출력하도록 합니다.
                             Log.d( TAG, _skuDetail.getSku() + ": " + _skuDetail.getTitle() + ", " + _skuDetail.getPrice() + ", " + _skuDetail.getDescription() );
-                            Log.d( TAG, _skuDetail.getOriginalJson() );
 
 
                         }
@@ -166,12 +169,13 @@ public class BillingManager implements PurchasesUpdatedListener {
 
 
     // 실제 구입 처리를 하는 메소드 입니다.
-    public void purchase( String prod )
+    public void purchase( String sku )
     {
-        SkuDetails skuDetails = null ;
-        if("member".equals(prod)){
-            skuDetails = skuDetails_Member;
+        SkuDetails skuDetails = null;
+        if("member".equals(sku)){ //회원등록
+            skuDetails = sku_member;
         }
+
         BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetails)
                 .build();
@@ -182,8 +186,6 @@ public class BillingManager implements PurchasesUpdatedListener {
     // 결제 처리를 하는 메소드. 결제후 callback
     @Override
     public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
-
-
         // 결제에 성공한 경우.
         if( responseCode == BillingClient.BillingResponse.OK && purchases != null )
         {
@@ -195,7 +197,6 @@ public class BillingManager implements PurchasesUpdatedListener {
                 mBillingClient.consumeAsync( _pur.getPurchaseToken(), mConsumResListnere );
             }
         }
-
         // 사용자가 결제를 취소한 경우.
         else if( responseCode == BillingClient.BillingResponse.USER_CANCELED )
         {
@@ -206,10 +207,8 @@ public class BillingManager implements PurchasesUpdatedListener {
         else
         {
             Log.d( TAG, "결제가 취소 되었습니다. 종료코드 : " + responseCode );
+            mFrag.memDel();
         }
-
-
-
     }
 
 }

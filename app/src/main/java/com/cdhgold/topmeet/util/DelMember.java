@@ -8,7 +8,6 @@ import org.w3c.dom.Document;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,24 +15,25 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 /*
-HttpURLConnection 서버통신
+회원 삭제   :  결제실패시나 , 탈퇴시
  */
-public class GetMember implements Callable<String> {
+public class DelMember implements Callable<String> {
     URL url;
     Document doc = null;
     HttpURLConnection conn;
     InputStreamReader isr;
     private Context context;
-    public GetMember(Context ctx){
+    public DelMember(Context ctx){
         this.context = ctx;
     }
     @Override
     public String call() throws Exception {
         String result = ""  ;
-        String DEVICEID = PreferenceManager.getString(context, "DEVICEID");
- Log.i("thread","DEVICEID==========="+DEVICEID);
+        String DEVICEID = PreferenceManager.getString(context, "DEVICEID"); // pk
+        Log.i("thread","DEVICEID==========="+DEVICEID);
         try {
-            URL url = new URL("http://konginfo.co.kr/topbd/topbd/getMem");
+
+            URL url = new URL("http://konginfo.co.kr/topbd/topbd/delMem");
 
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -42,17 +42,20 @@ public class GetMember implements Callable<String> {
             conn.setConnectTimeout(10000);
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(),"UTF8");
 
             HashMap<String, String> map = new HashMap<>();
             map.put("DEVICEID", DEVICEID);
+
             StringBuffer sbParams = new StringBuffer();
             boolean isAnd = false;
 
             for(String key: map.keySet()){
                 sbParams.append(key).append("=").append(map.get(key));
             }
-            wr.write(sbParams.toString());
+
+            String spost = sbParams.toString();
+            wr.write(spost );
             wr.flush();
             wr.close();
             StringBuffer json = new StringBuffer();
@@ -61,20 +64,18 @@ public class GetMember implements Callable<String> {
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String inputLine = "";
                 while ((inputLine = in.readLine()) != null) {
-                    json.append(inputLine);
+                    json.append(inputLine); // 처리결과
                 }
                 in.close();
             }
-
             conn.disconnect();
-            String nickname = "";
+            String delMem = "";
             Log.i("thread","json==========="+json.toString());
-            if( !"null".equals(json.toString())) {
+            if(!json.equals("")) {
                 JSONObject jsonObject = new JSONObject(json.toString());
-                nickname = jsonObject.getString("nickname");
+                delMem = jsonObject.getString("delMem");
             }
-            Log.i("thread","1==========="+nickname);
-            result = nickname;
+            result = delMem;
         }
         catch (Exception ex) {
             ex.printStackTrace();

@@ -19,8 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cdhgold.topmeet.MainActivity;
+import com.cdhgold.topmeet.MemInterf;
 import com.cdhgold.topmeet.R;
 import com.cdhgold.topmeet.util.BillingManager;
+import com.cdhgold.topmeet.util.DelMember;
 import com.cdhgold.topmeet.util.PreferenceManager;
 import com.cdhgold.topmeet.util.SetMember;
 import com.cdhgold.topmeet.util.Util;
@@ -35,7 +37,7 @@ import java.util.concurrent.FutureTask;
   여1(fm 글래머),여2(fg 일반), nickname, 연령대(20대,30대,40대,50대,60대,70대 ) , introduce, deviceid
 
  */
-public class MregiFragment extends Fragment  implements View.OnClickListener {
+public class MregiFragment extends Fragment  implements View.OnClickListener, MemInterf {
 
     private View view;
     ImageView fm  ; // 여성근육질
@@ -160,13 +162,15 @@ public class MregiFragment extends Fragment  implements View.OnClickListener {
         thread.start();
         try {
             String ret = (String)futureTask.get(); // 결과
-            if("OK".equals(ret)){// 가입후 화면이동
+            if("OK".equals(ret)) {// 가입후 화면이동
                 //MoldFragment oldmember = new MoldFragment();
                 //((MainActivity)getActivity()).replaceFragment(oldmember);
-                Util.showAlim("Welcome!",getContext());
+                Util.showAlim("Welcome!", getContext());
                 //결제 $100 후 화면 이동. oldmember
-                BillingManager bill = new BillingManager((MainActivity)getActivity());
+                BillingManager bill = new BillingManager((MainActivity) getActivity(), this);
                 bill.purchase("member");
+            }else if("err".equals(ret)){
+                Util.showAlim("Please NickName, introduce!", getContext());
             }else{// alert 차후에 시도하세요
                 Util.showAlim("Please try again later!",getContext());
                 MnewFragment newmember = new MnewFragment();
@@ -178,5 +182,28 @@ public class MregiFragment extends Fragment  implements View.OnClickListener {
             e.printStackTrace();
         }
 
+    }
+    /*
+    결제실패시 등록취소
+     */
+    @Override
+    public void memDel() {
+        DelMember delMem = new DelMember(getContext());
+        FutureTask futureTask = new FutureTask(delMem);
+        Thread thread = new Thread(futureTask);
+        thread.start();
+        try {
+            String ret = (String)futureTask.get(); // 결과
+            if("OK".equals(ret)) {// 가입후 화면이동
+                //MoldFragment oldmember = new MoldFragment();
+                //((MainActivity)getActivity()).replaceFragment(oldmember);
+                Util.showAlim("Please try again(Payment failure).", getContext());
+
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

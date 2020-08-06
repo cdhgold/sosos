@@ -38,6 +38,9 @@ public class SetMember implements Callable<String> {
 
         Log.i("thread","DEVICEID==========="+DEVICEID);
         try {
+            if("".equals(nickNm.trim()) || "".equals(info.trim()) ){
+                return "err";
+            }
             URL url = new URL("http://konginfo.co.kr/topbd/topbd/setMem");
 
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -47,7 +50,7 @@ public class SetMember implements Callable<String> {
             conn.setConnectTimeout(10000);
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(),"UTF8");
 
             HashMap<String, String> map = new HashMap<>();
             map.put("DEVICEID", DEVICEID);
