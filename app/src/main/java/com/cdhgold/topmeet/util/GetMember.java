@@ -24,8 +24,10 @@ public class GetMember implements Callable<String> {
     HttpURLConnection conn;
     InputStreamReader isr;
     private Context context;
-    public GetMember(Context ctx){
+    private String getGbn = "";
+    public GetMember(Context ctx, String tmp){
         this.context = ctx;
+        this.getGbn = tmp;  // ALL, ONE 전체가져오기와, 한사람만 가져오기
     }
     @Override
     public String call() throws Exception {
@@ -45,7 +47,12 @@ public class GetMember implements Callable<String> {
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 
             HashMap<String, String> map = new HashMap<>();
-            map.put("DEVICEID", DEVICEID);
+            if("ALL".equals(getGbn)){
+                map.put("DEVICEID", "");
+            }else{
+                map.put("DEVICEID", DEVICEID);
+            }
+
             StringBuffer sbParams = new StringBuffer();
             boolean isAnd = false;
 
@@ -69,12 +76,17 @@ public class GetMember implements Callable<String> {
             conn.disconnect();
             String nickname = "";
             Log.i("thread","json==========="+json.toString());
-            if( !"null".equals(json.toString())) {
-                JSONObject jsonObject = new JSONObject(json.toString());
-                nickname = jsonObject.getString("nickname");
+            if("ONE".equals(getGbn) ) {
+                if (!"null".equals(json.toString())) {
+                    JSONObject jsonObject = new JSONObject(json.toString());
+                    nickname = jsonObject.getString("nickname");
+                }
+                Log.i("thread", "1===========" + nickname);
+                result = nickname;
+            }else{
+                //all
+                result = json.toString();
             }
-            Log.i("thread","1==========="+nickname);
-            result = nickname;
         }
         catch (Exception ex) {
             ex.printStackTrace();

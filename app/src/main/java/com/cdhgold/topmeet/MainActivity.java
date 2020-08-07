@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity    {
         String deviceid = PreferenceManager.getString(this, "DEVICEID");// device id
         //서버통신 회원유무확인
         String ret = "";
-        GetMember callable = new GetMember(this);
+        GetMember callable = new GetMember(this,"ONE");
         FutureTask futureTask = new FutureTask(callable);
         Thread thread = new Thread(futureTask);
         thread.start();
