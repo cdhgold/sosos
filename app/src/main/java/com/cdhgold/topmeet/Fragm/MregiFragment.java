@@ -163,12 +163,17 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
         try {
             String ret = (String)futureTask.get(); // 결과
             if("OK".equals(ret)) {// 가입후 화면이동
-                MoldFragment oldmember = new MoldFragment();
-                ((MainActivity)getActivity()).replaceFragment(oldmember);
-                Util.showAlim("Welcome!", getContext());
+                //MoldFragment oldmember = new MoldFragment();
+                //((MainActivity)getActivity()).replaceFragment(oldmember);
+                //Util.showAlim("Welcome!", getContext());
                 //결제 $100 후 화면 이동. oldmember
-                //BillingManager bill = new BillingManager((MainActivity) getActivity(), this);
-                //bill.purchase("member");
+                BillingManager bill = new BillingManager(getContext());
+                bill.setProd("p_member");
+
+                String inApp = PreferenceManager.getString(getContext(), "inApp");
+                if("FAIL".equals(inApp)){// 결제실패시 등록취소
+
+                }
             }else if("err".equals(ret)){
                 Util.showAlim("Please NickName, introduce!", getContext());
             }else{// alert 차후에 시도하세요

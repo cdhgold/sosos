@@ -33,7 +33,7 @@ public class DelMember implements Callable<String> {
         Log.i("thread","DEVICEID==========="+DEVICEID);
         try {
 
-            URL url = new URL("http://konginfo.co.kr/topbd/topbd/delMem");
+            URL url = new URL("http://konginfo.co.kr/topbd/topbd/makeMem");
 
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

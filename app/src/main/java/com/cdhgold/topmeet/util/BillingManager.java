@@ -1,204 +1,164 @@
 package com.cdhgold.topmeet.util;
-
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
-import com.cdhgold.topmeet.Fragm.MnewFragment;
-import com.cdhgold.topmeet.Fragm.MregiFragment;
+import com.cdhgold.topmeet.R;
+
+
+import static android.content.ContentValues.TAG;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.SERVICE_TIMEOUT;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.OK;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.USER_CANCELED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.BILLING_UNAVAILABLE;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_UNAVAILABLE;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ERROR;
+import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
 
 import java.util.ArrayList;
 import java.util.List;
-/*
-구글 인앱결제 모듈
- */
-public class BillingManager implements PurchasesUpdatedListener {
-    // 필요 상수들.
-    final String TAG = "IN-APP-BILLING";
-    // 초기화 시 입력 받거나 생성되는 멤버 변수들.
-    private BillingClient mBillingClient;
-    private Activity mActivity;
-    private MregiFragment mFrag;
-    private ConsumeResponseListener mConsumResListnere; // 소비 관련
-    // 현재 접속 상태를 나타 냅니다.
-    public enum connectStatusTypes { waiting, connected, fail, disconnected }
-    public connectStatusTypes connectStatus = connectStatusTypes.waiting;
+
+
+public  class BillingManager implements PurchasesUpdatedListener,      ConsumeResponseListener {
     // 결제를 위해 가지온 상품 정보를 저장한 변수 입니다.
     public List<SkuDetails> mSkuDetailsList;
-    SkuDetails sku_member;
-    // 생성자.
-    public BillingManager( Activity _activity, MregiFragment _frg )
-    {
-        SkuDetails skuDetails_Member ;
-        // 초기화 시 입력 받은 값들을 넣어 줍니다.
-        mActivity = _activity;
-        mFrag = _frg;
-        Log.d(TAG, "구글 결제 매니저를 초기화 하고 있습니다.");
-        // 결제를 위한, 빌링 클라이언트를 생성합니다.
-        mBillingClient = BillingClient.newBuilder(mActivity).setListener(this).build();
-        // 구글 플레이와 연결을 시도합니다.
-        // 객체생성시 호출
-        mBillingClient.startConnection(new BillingClientStateListener() {
-            // 결제 작업 완료 가능한 상태.
-            @Override
-            public void onBillingSetupFinished(int responseCode) {
-
-                // 접속이 성공한 경우, 처리.
-                if (responseCode == BillingClient.BillingResponse.OK) {
-                    connectStatus = connectStatusTypes.connected;
-                    Log.d(TAG, "구글 결제 서버에 접속을 성공하였습니다.");
-                    get_Sku_Detail_List();
-                }
-
-                // 접속이 실패한 경우, 처리.
-                else {
-                    get_Sku_Detail_List();
-                    connectStatus = connectStatusTypes.fail;
-                    Log.d(TAG, "구글 결제 서버 접속에 실패하였습니다.\n오류코드:" + responseCode);
-                }
-
-            }
-
-            // 결제 작업 중, 구글 서버와 연결이 끊어진 상태.
-            @Override
-            public void onBillingServiceDisconnected() {
-                connectStatus = connectStatusTypes.disconnected;
-                Log.d(TAG, "구글 결제 서버와 접속이 끊어졌습니다.");
-            }
-        });
-        // 소모성 상품을 소모한 후, 응답 받는 메소드 입니다.
-        mConsumResListnere = new ConsumeResponseListener() {
-            @Override
-            public void onConsumeResponse(int responseCode, String purchaseToken) {
-
-                // 성공적으로 아이템을 소모한 경우.
-                if( responseCode == BillingClient.BillingResponse.OK )
-                {
-                    Log.d( TAG, "상품을 성공적으로 소모하였습니다. 소모된 상품=>" + purchaseToken );
-                    // data 업데이트 적립, 기타
-                    return;
-                }
-
-                // 성공적으로 아이템을 소모한 경우.
-                else
-                {
-                    Log.d( TAG, "상품 소모에 실패하였습니다. 오류코드 ("+responseCode+"), 대상 상품 코드:" + purchaseToken );
-                    return;
-                }
-            }
-        };
-    }
-    // 구입 가능한 상품의 리스트를 받아 오는 메소드 입니다.
-    public void get_Sku_Detail_List()
-    {
-        // 구글의 상품 정보들의 ID를 만들어 줍니다.
-        List<String> Sku_ID_List = new ArrayList<>();
-        Sku_ID_List.add( "p_member" );
-
-
-        // SkuDetailsParam 객체를 만들어 줍니다. (1회성 소모품에 대한)
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-        params.setSkusList( Sku_ID_List ).setType(BillingClient.SkuType.INAPP);
-
-
-        // 비동기 상태로 앱의, 정보를 가지고 옵니다.
-        mBillingClient.querySkuDetailsAsync(params.build() , new SkuDetailsResponseListener()
-                {
-
-                    @Override
-                    public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
-
-
-                        // 상품 정보를 가지고 오지 못한 경우, 오류를 반환하고 종료합니다.
-                        if( responseCode != BillingClient.BillingResponse.OK)
-                        {
-                            Log.d(TAG, "상품 정보를 가지고 오던 중 오류를 만났습니다. 오류코드 : " + responseCode);
-                            return;
-                        }
-
-                        // 하나의 상품 정보도 가지고 오지 못했습니다.
-                        if( skuDetailsList == null )
-                        {
-                            Log.d(TAG, "상품 정보가 존재하지 않습니다.");
-                            return;
-                        }
-
-
-                        // 응답 받은 데이터들의 숫자를 출력 합니다.
-                        Log.d(TAG, "응답 받은 데이터 숫자:" + skuDetailsList.size());
-
-                        // 받아 온 상품 정보를 차례로 호출 합니다.
-                        for( int _sku_index = 0;_sku_index < skuDetailsList.size(); _sku_index++)
-                        {
-
-                            // 해당 인덱스의 객체를 가지고 옵니다.
-                            SkuDetails _skuDetail = skuDetailsList.get( _sku_index );
-                            String inappId = _skuDetail.getSku();// 결제제품 ID
-                            if("p_member".equals(inappId) ){
-                                sku_member = _skuDetail;
-                            }
-                            // 해당 인덱스의 상품 정보를 출력하도록 합니다.
-                            Log.d( TAG, _skuDetail.getSku() + ": " + _skuDetail.getTitle() + ", " + _skuDetail.getPrice() + ", " + _skuDetail.getDescription() );
-
-
-                        }
-
-
-                        // 받은 값을 멤버 변수로 저장합니다.
-                        mSkuDetailsList = skuDetailsList;
-
-
-                    }
-                }
-        );
-
-
-
+    private BillingClient billingClient;
+    private Context ctx;
+    private String skuId;
+    private List<SkuDetails> misProductos;
+    String p_member = "p_member" ;  //제품 ID
+    SkuDetails memberSku;
+    // Constructor de la clase Pagos
+    public BillingManager(Context context) {
+        ctx = context;
+        connectBillingClient();
     }
 
 
-    // 실제 구입 처리를 하는 메소드 입니다.
-    public void purchase( String sku )
-    {
-        SkuDetails skuDetails = null;
-        if("member".equals(sku)){ //회원등록
-            skuDetails = sku_member;
+    // activity에서 호출
+    public void setProd(String skuId) {
+
+        this.skuId = skuId;
+        if("p_member".equals(skuId) ) {
+            doBillingFlow(memberSku);
         }
+
+    }
+    private void doBillingFlow(SkuDetails skuDetails) {
 
         BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetails)
                 .build();
-        int responseCode = mBillingClient.launchBillingFlow(mActivity, flowParams);
+        billingClient.launchBillingFlow((Activity) ctx, flowParams);
+        /*if(responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) {
+            Purchase.PurchasesResult purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
+            onPurchasesUpdated(BillingClient.BillingResponse.OK, purchasesResult.getPurchasesList());
+        }*/
+    }
+
+    // Configura el Billing Client para iniciar la conexión con Google Play Console
+    private void connectBillingClient() {
+
+        //  1. Configura el Billing Client
+        billingClient = BillingClient.newBuilder(ctx)
+                .enablePendingPurchases()
+                .setListener(this)
+                .build();
+        // 구글플레이 접속
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(BillingResult billingResult   ) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK ) {
+                    // The billing client is ready. You can query purchases here.
+                    List<String> skuList = new ArrayList<> ();
+                    skuList.add(skuId); // 제품id
+
+                    SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
+                    billingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
+                        @Override
+                        public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
+                            // Process the result.
+                            if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+                                for (SkuDetails skuDetails : list) {
+                                    String sku = skuDetails.getSku();
+                                    String price = skuDetails.getPrice();
+
+                                    if (skuId.equals(sku)) {
+                                        memberSku = skuDetails; // 상품을 담는다
+
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                }
+            }
+
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                //billingClient.startConnection();
+            }
+        });
+        get_Sku_Detail_List();
     }
 
 
-    // 결제 처리를 하는 메소드. 결제후 callback
+
+    // Obtiene el Producto que se comprará según el Sku ingresado mediante comprar(sku);
+    private SkuDetails getSkuIdDetails() {
+
+        if (misProductos == null) return null;
+        for (SkuDetails skuProducto : misProductos) {
+            if (skuId.equals(skuProducto.getSku())) return skuProducto;
+        }
+        return null;
+
+    }
+
+    // 결제 처리를 하는 메소드.
     @Override
-    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+    public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
+
+        int responseCode = billingResult.getResponseCode();
         // 결제에 성공한 경우.
-        if( responseCode == BillingClient.BillingResponse.OK && purchases != null )
+        if( responseCode == BillingClient.BillingResponseCode.OK && purchases != null )
         {
+
             Log.d( TAG, "결제에 성공했으며, 아래에 구매한 상품들이 나열될 것 입니다." );
+
             for( Purchase _pur : purchases )
             {
                 Log.d( TAG, "결제에 대해 응답 받은 데이터 :"+ _pur.getOriginalJson() );
-                // 구매성공후 소비를 해야 재구매가 가능해진다
-                mBillingClient.consumeAsync( _pur.getPurchaseToken(), mConsumResListnere );
+                ConsumeParams params = ConsumeParams.newBuilder()
+                        .setPurchaseToken(_pur.getPurchaseToken())
+                        .build();
+
+                billingClient.consumeAsync( params, this );
+
             }
         }
+
         // 사용자가 결제를 취소한 경우.
-        else if( responseCode == BillingClient.BillingResponse.USER_CANCELED )
+        else if( responseCode == BillingClient.BillingResponseCode.USER_CANCELED )
         {
             Log.d( TAG, "사용자에 의해 결제가 취소 되었습니다." );
         }
@@ -207,8 +167,105 @@ public class BillingManager implements PurchasesUpdatedListener {
         else
         {
             Log.d( TAG, "결제가 취소 되었습니다. 종료코드 : " + responseCode );
-            mFrag.memDel();
+        }
+
+
+
+    }
+
+    // Valida la compra y Devuelve True si encuentra la compra del usuario en el Servidor de Google
+    private boolean validaCompra() {
+
+        List<Purchase> purchasesList = billingClient.queryPurchases(INAPP).getPurchasesList();
+        if (purchasesList != null && !purchasesList.isEmpty()) {
+            for (Purchase purchase : purchasesList) {
+                if (purchase.getSku().equals(skuId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+
+    // 상품정보를 가져온다
+    private void consumeCompras() {
+
+        Purchase.PurchasesResult queryPurchases = billingClient.queryPurchases(INAPP);
+        if (queryPurchases.getResponseCode() == OK) {
+            List<Purchase> purchasesList = queryPurchases.getPurchasesList();
+            if (purchasesList != null && !purchasesList.isEmpty()) {
+                for (Purchase purchase : purchasesList) {
+                    ConsumeParams params = ConsumeParams.newBuilder()
+                            .setPurchaseToken(purchase.getPurchaseToken())
+                            .build();
+                    billingClient.consumeAsync(params, this);
+                }
+            }
+        }
+
+    }
+
+
+    @Override
+    // Evento salta cuando se ha consumido un producto, Si responseCode = 0, ya se puede volver a comprar
+    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+        if (billingResult.getResponseCode() == OK) {
+            Log.i("Pagos", "Token de Compra: " + purchaseToken + " consumida");
+        } else {
+            Log.i("Pagos", "Error al consumir compra, responseCode: " + billingResult.getResponseCode());
         }
     }
+
+
+    // 구입 가능한 상품의 리스트를 받아 오는 메소드 입니다.
+    public void get_Sku_Detail_List()
+    {
+        // 구글의 상품 정보들의 ID를 만들어 줍니다.
+        List<String> Sku_ID_List = new ArrayList<>();
+        Sku_ID_List.add( "p_member" );
+        // SkuDetailsParam 객체를 만들어 줍니다. (1회성 소모품에 대한)
+        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+        params.setSkusList( Sku_ID_List ).setType(BillingClient.SkuType.INAPP);
+        // 비동기 상태로 앱의, 정보를 가지고 옵니다.
+        billingClient.querySkuDetailsAsync(params.build() ,  new SkuDetailsResponseListener()
+                {
+                    @Override
+                    public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+                        // 상품 정보를 가지고 오지 못한 경우, 오류를 반환하고 종료합니다.
+                        if( billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK)
+                        {
+                            Log.d(TAG, "상품 정보를 가지고 오던 중 오류를 만났습니다. 오류코드 : " + billingResult.getResponseCode());
+                            return;
+                        }
+                        // 하나의 상품 정보도 가지고 오지 못했습니다.
+                        if( skuDetailsList == null )
+                        {
+                            Log.d(TAG, "상품 정보가 존재하지 않습니다.");
+                            return;
+                        }
+                        // 응답 받은 데이터들의 숫자를 출력 합니다.
+                        Log.d(TAG, "응답 받은 데이터 숫자:" + skuDetailsList.size());
+
+                        // 받아 온 상품 정보를 차례로 호출 합니다.
+                        for( int _sku_index = 0;_sku_index < skuDetailsList.size(); _sku_index++)
+                        {
+                            // 해당 인덱스의 객체를 가지고 옵니다.
+                            SkuDetails _skuDetail = skuDetailsList.get( _sku_index );
+
+                            // 해당 인덱스의 상품 정보를 출력하도록 합니다.
+                            Log.d( TAG, _skuDetail.getSku() + ": " + _skuDetail.getTitle() + ", " + _skuDetail.getPrice() + ", " + _skuDetail.getDescription() );
+                            Log.d( TAG, _skuDetail.getOriginalJson() );
+                        }
+                        // 받은 값을 멤버 변수로 저장합니다.
+                        mSkuDetailsList = skuDetailsList;
+                    }
+                }
+        );
+    }
+
+
+
 
 }

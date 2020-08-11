@@ -1,6 +1,7 @@
 package com.cdhgold.topmeet.Fragm;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
 
     private View view;
     private String memGbn = "";
-    private ArrayList<MemberVo> data;
+    private ArrayList<MemberVo> data = new ArrayList<MemberVo>();
     public  MviewFragment(String gender){
         this.memGbn = gender; // 성별 구분 M , F, 남성 여성으로 구분해서 가져온다 .
     }
@@ -66,12 +67,19 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
         mview = view.findViewById(R.id.memView);
         mview.setLayoutManager(layoutManager);
          try {
-             JSONObject jsonObject = new JSONObject(rjson);
-             // nickname = jsonObject.getString("nickname");
-             JSONArray jsonarray = jsonObject.getJSONArray(rjson);
+             JSONArray jsonarray = new JSONArray(rjson);
+
              for(int i = 0; i< jsonarray.length() ;i ++){
-                // jsonarray.get(i)
+                 JSONObject jsonObj = (JSONObject) jsonarray.get(i);
+                 String deviceid = (String) jsonObj.get("deviceid");
+                 String nickname = (String) jsonObj.get("nickname");
+                 Log.d("deviceid  ",deviceid);
+                 MemberVo vo = new MemberVo();
+                 vo.setNickname(nickname);
+                 vo.setDeviceid(deviceid);
+                 data.add(vo);
              }
+
              MviewGridAdapter adapter = new MviewGridAdapter(getContext(), data, this );
              mview.setAdapter(adapter);
          }catch(Exception e){
