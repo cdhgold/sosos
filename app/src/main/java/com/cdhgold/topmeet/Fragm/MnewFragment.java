@@ -24,7 +24,7 @@ public class MnewFragment extends Fragment  implements View.OnClickListener {
 
     private View view;
     ImageButton btn  ;
-    private MregiFragment mregif = new MregiFragment();
+    private MregiFragment mregif = new MregiFragment(); // 등록화면
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

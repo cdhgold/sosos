@@ -28,6 +28,7 @@ import static com.android.billingclient.api.BillingClient.BillingResponseCode.BI
 import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_UNAVAILABLE;
 import static com.android.billingclient.api.BillingClient.BillingResponseCode.ERROR;
 import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
+import static java.security.AccessController.getContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +40,13 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
     private BillingClient billingClient;
     private Context ctx;
     private String skuId;
+    private Activity mActivity;
     private List<SkuDetails> misProductos;
     String p_member = "p_member" ;  //제품 ID
     SkuDetails memberSku;
     // Constructor de la clase Pagos
-    public BillingManager(Context context) {
-        ctx = context;
+    public BillingManager(Activity _activity) {
+        mActivity = _activity;
         connectBillingClient();
     }
 
@@ -58,12 +60,13 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
         }
 
     }
+    //구매
     private void doBillingFlow(SkuDetails skuDetails) {
 
         BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetails)
                 .build();
-        billingClient.launchBillingFlow((Activity) ctx, flowParams);
+        billingClient.launchBillingFlow(mActivity, flowParams);
         /*if(responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) {
             Purchase.PurchasesResult purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
             onPurchasesUpdated(BillingClient.BillingResponse.OK, purchasesResult.getPurchasesList());
@@ -74,7 +77,7 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
     private void connectBillingClient() {
 
         //  1. Configura el Billing Client
-        billingClient = BillingClient.newBuilder(ctx)
+        billingClient = BillingClient.newBuilder(mActivity)
                 .enablePendingPurchases()
                 .setListener(this)
                 .build();
@@ -134,7 +137,7 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
 
     }
 
-    // 결제 처리를 하는 메소드.
+    // 결제 처리후 callback
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
 
@@ -151,9 +154,9 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
                 ConsumeParams params = ConsumeParams.newBuilder()
                         .setPurchaseToken(_pur.getPurchaseToken())
                         .build();
-
+                //결제성공후 소비를 해야, 재 구매가 가능하다
                 billingClient.consumeAsync( params, this );
-
+                PreferenceManager.setString(mActivity.getApplicationContext(),  "inApp","OK");// 결제성공,실패시 data 원복 시켜야.
             }
         }
 
@@ -168,9 +171,16 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
         {
             Log.d( TAG, "결제가 취소 되었습니다. 종료코드 : " + responseCode );
         }
+    }
 
-
-
+    @Override
+    // consumeAsync callback, 결제성공후 소비 callback
+    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+        if (billingResult.getResponseCode() == OK) {
+            Log.i("Pagos", "Token de Compra: " + purchaseToken + " consumida");
+        } else {
+            Log.i("Pagos", "Error al consumir compra, responseCode: " + billingResult.getResponseCode());
+        }
     }
 
     // Valida la compra y Devuelve True si encuentra la compra del usuario en el Servidor de Google
@@ -208,16 +218,6 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
     }
 
 
-    @Override
-    // Evento salta cuando se ha consumido un producto, Si responseCode = 0, ya se puede volver a comprar
-    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
-        if (billingResult.getResponseCode() == OK) {
-            Log.i("Pagos", "Token de Compra: " + purchaseToken + " consumida");
-        } else {
-            Log.i("Pagos", "Error al consumir compra, responseCode: " + billingResult.getResponseCode());
-        }
-    }
-
 
     // 구입 가능한 상품의 리스트를 받아 오는 메소드 입니다.
     public void get_Sku_Detail_List()
@@ -236,12 +236,14 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
                         // 상품 정보를 가지고 오지 못한 경우, 오류를 반환하고 종료합니다.
                         if( billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK)
                         {
+
                             Log.d(TAG, "상품 정보를 가지고 오던 중 오류를 만났습니다. 오류코드 : " + billingResult.getResponseCode());
                             return;
                         }
                         // 하나의 상품 정보도 가지고 오지 못했습니다.
                         if( skuDetailsList == null )
                         {
+
                             Log.d(TAG, "상품 정보가 존재하지 않습니다.");
                             return;
                         }
@@ -253,6 +255,10 @@ public  class BillingManager implements PurchasesUpdatedListener,      ConsumeRe
                         {
                             // 해당 인덱스의 객체를 가지고 옵니다.
                             SkuDetails _skuDetail = skuDetailsList.get( _sku_index );
+                            String pid = _skuDetail.getSku();
+                            if(pid.equals(p_member)){ // 회원가입 sku
+                                memberSku = _skuDetail;
+                            }
 
                             // 해당 인덱스의 상품 정보를 출력하도록 합니다.
                             Log.d( TAG, _skuDetail.getSku() + ": " + _skuDetail.getTitle() + ", " + _skuDetail.getPrice() + ", " + _skuDetail.getDescription() );

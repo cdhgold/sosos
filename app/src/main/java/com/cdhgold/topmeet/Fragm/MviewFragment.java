@@ -48,7 +48,7 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
         return view;
     }
     private  void showProduct()  {
-        // 회원정보를 가져온다.
+        // 회원정보를 가져온다. ( M, F )
         String rjson = "";
         GetMember callable = new GetMember(getContext(),"ALL");
         FutureTask futureTask = new FutureTask(callable);
@@ -73,10 +73,13 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
                  JSONObject jsonObj = (JSONObject) jsonarray.get(i);
                  String deviceid = (String) jsonObj.get("deviceid");
                  String nickname = (String) jsonObj.get("nickname");
+                 String gender = (String) jsonObj.get("gender");
+
                  Log.d("deviceid  ",deviceid);
                  MemberVo vo = new MemberVo();
                  vo.setNickname(nickname);
                  vo.setDeviceid(deviceid);
+                 vo.setGender(gender);
                  data.add(vo);
              }
 

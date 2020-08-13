@@ -156,26 +156,49 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
     등록
      */
     public void memIns(){
-        SetMember setMem = new SetMember(getContext());
+        if("".equals(gender) || "".equals(sage) ){
+            Util.showAlim("Please Gender and Age !", getContext());
+            return;
+        }
+        SetMember setMem = new SetMember(getContext(),"NEW");
         FutureTask futureTask = new FutureTask(setMem);
         Thread thread = new Thread(futureTask);
         thread.start();
         try {
             String ret = (String)futureTask.get(); // 결과
             if("OK".equals(ret)) {// 가입후 화면이동
-                //MoldFragment oldmember = new MoldFragment();
-                //((MainActivity)getActivity()).replaceFragment(oldmember);
+
                 //Util.showAlim("Welcome!", getContext());
-                //결제 $100 후 화면 이동. oldmember
-                BillingManager bill = new BillingManager(getContext());
-                bill.setProd("p_member");
+                /*
+                    결제 $10 후 화면 이동. oldmember
+                */
+  //BillingManager bill = new BillingManager(getActivity());
+//bill.setProd("p_member");
 
-                String inApp = PreferenceManager.getString(getContext(), "inApp");
-                if("FAIL".equals(inApp)){// 결제실패시 등록취소
-
+                String inApp = "OK" ;
+                //inApp = PreferenceManager.getString(getContext(), "inApp");
+                if(!"OK".equals(inApp)){// 회원등록 : 결제실패시 등록취소
+                    // 결제실패 update
+                    PreferenceManager.setString(getContext(), "pay","F");
+                }else{
+                    // 결제성공 update
+                    PreferenceManager.setString(getContext(), "pay","S");
+                }
+                setMem = new SetMember(getContext(),"UP");
+                futureTask = new FutureTask(setMem); // 비동기
+                thread = new Thread(futureTask);
+                thread.start();
+                try {
+                    ret = (String) futureTask.get(); // 결과
+                    if ("OK".equals(ret)) {// 결제여부에 따라 next화면이동, 또는 결재창으로 이동
+                        MoldFragment oldmember = new MoldFragment();
+                        ((MainActivity)getActivity()).replaceFragment(oldmember);
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
             }else if("err".equals(ret)){
-                Util.showAlim("Please NickName, introduce!", getContext());
+                Util.showAlim("Please NickName and introduce!", getContext());
             }else{// alert 차후에 시도하세요
                 Util.showAlim("Please try again later!",getContext());
                 MnewFragment newmember = new MnewFragment();

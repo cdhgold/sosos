@@ -67,6 +67,7 @@ public class MviewGridAdapter extends RecyclerView.Adapter<MviewGridAdapter.Memb
             membViewHolder.productImage.setImageResource(R.drawable.fm);
         }
         membViewHolder.productPrice.setText(tamt);
+        membViewHolder.productName.setText(nicknm);
 
     }
 
@@ -118,7 +119,7 @@ public class MviewGridAdapter extends RecyclerView.Adapter<MviewGridAdapter.Memb
                     if (pos != RecyclerView.NO_POSITION) {
                         MemberVo vo = data.get(pos);
                         String deviceid = vo.getDeviceid();
-                        listener.onItemClick(deviceid );
+                        listener.onItemClick(deviceid ); // 상세보기
                         notifyItemChanged(pos) ;
                     }
                 }

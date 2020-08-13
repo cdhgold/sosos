@@ -16,7 +16,7 @@ import com.cdhgold.topmeet.R;
 
 
 /*
-  등록 멤버 처음화면
+  등록 멤버  : 처음화면
  */
 public class MoldFragment extends Fragment  implements View.OnClickListener {
 
@@ -30,11 +30,11 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
         view = inflater.inflate(R.layout.mem_old, container, false);
 
         //최초 앱설치한사람은 회원가입요청
-        fbtn = (ImageView)view.findViewById(R.id.female);
+        fbtn = (ImageView)view.findViewById(R.id.female);   // 여성회원보기
         fbtn.setOnClickListener(this);
-        mbtn = (ImageView)view.findViewById(R.id.male);
+        mbtn = (ImageView)view.findViewById(R.id.male);     // 남성회원보기
         mbtn.setOnClickListener(this);
-        ibtn = (ImageView)view.findViewById(R.id.item);
+        ibtn = (ImageView)view.findViewById(R.id.item);     // item 구매
         ibtn.setOnClickListener(this);
 
         return view;
@@ -52,6 +52,7 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
                 ((MainActivity)getActivity()).replaceFragment(mview);
                 break;
             case R.id.item: // 아이템구매
+
 /*
 신발 $100 , 		P01
 시계 $300, 		P02

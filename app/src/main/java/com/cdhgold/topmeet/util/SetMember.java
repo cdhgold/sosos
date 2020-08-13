@@ -22,9 +22,11 @@ public class SetMember implements Callable<String> {
     Document doc = null;
     HttpURLConnection conn;
     InputStreamReader isr;
+    String memGbn = "";             // 등록 IN, 수정 UP
     private Context context;
-    public SetMember(Context ctx){
+    public SetMember(Context ctx, String gbn ){
         this.context = ctx;
+        this.memGbn = gbn ;
     }
     @Override
     public String call() throws Exception {
@@ -34,19 +36,26 @@ public class SetMember implements Callable<String> {
         String info = PreferenceManager.getString(context, "info");
         String age = PreferenceManager.getString(context, "age");
         String gender = PreferenceManager.getString(context, "gender");
-
+        String pay = "";
 
         Log.i("thread","DEVICEID==========="+DEVICEID);
         try {
             if("".equals(nickNm.trim()) || "".equals(info.trim()) ){
                 return "err";
             }
-            URL url = new URL("http://konginfo.co.kr/topbd/topbd/setMem");
+            if("NEW".equals(memGbn) ) {
+                url = new URL("http://konginfo.co.kr/topbd/topbd/setMem");
+            }
+            else if("UP".equals(memGbn) ) { // 결제실패시 , 멤버data유지하고, 결제여부만 update ,결제성공 S, 실패 F
+                url = new URL("http://konginfo.co.kr/topbd/topbd/setMemUp");
+                pay = PreferenceManager.getString(context, "pay");
 
+            }
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Accept-Charset","UTF-8");
-            conn.setUseCaches(false); conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setRequestMethod("POST");
             conn.setConnectTimeout(10000);
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -58,6 +67,8 @@ public class SetMember implements Callable<String> {
             map.put("info", info);
             map.put("age", age);
             map.put("gender", gender);
+            map.put("payment", pay);
+
             StringBuffer sbParams = new StringBuffer();
             boolean isAnd = false;
 
@@ -82,10 +93,10 @@ public class SetMember implements Callable<String> {
                 in.close();
             }
 
-            conn.disconnect();
+
             String setMem = "";
             Log.i("thread","json==========="+json.toString());
-            if(!json.equals("")) {
+            if(!"".equals(json.toString()) && !"null".equals(json.toString())) {
                 JSONObject jsonObject = new JSONObject(json.toString());
                 setMem = jsonObject.getString("setMem");
             }
@@ -94,6 +105,11 @@ public class SetMember implements Callable<String> {
         }
         catch (Exception ex) {
             ex.printStackTrace();
+        }
+        finally {
+            if(conn != null) {
+                conn.disconnect();
+            }
         }
         return result;
     }

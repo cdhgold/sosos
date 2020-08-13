@@ -27,7 +27,7 @@ public class GetMember implements Callable<String> {
     private String getGbn = "";
     public GetMember(Context ctx, String tmp){
         this.context = ctx;
-        this.getGbn = tmp;  // ALL, ONE 전체가져오기와, 한사람만 가져오기
+        this.getGbn = tmp;  // (M, F ), ONE 전체가져오기와, 한사람만 가져오기
     }
     @Override
     public String call() throws Exception {
@@ -47,8 +47,8 @@ public class GetMember implements Callable<String> {
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 
             HashMap<String, String> map = new HashMap<>();
-            if("ALL".equals(getGbn)){
-                map.put("DEVICEID", "");
+            if(!"ONE".equals(getGbn)){
+                map.put("gender", getGbn);
             }else{
                 map.put("DEVICEID", DEVICEID);
             }
@@ -76,15 +76,11 @@ public class GetMember implements Callable<String> {
             conn.disconnect();
             String nickname = "";
             Log.i("thread","json==========="+json.toString());
-            if("ONE".equals(getGbn) ) {
-                if (!"null".equals(json.toString())) {
-                    JSONObject jsonObject = new JSONObject(json.toString());
-                    nickname = jsonObject.getString("nickname");
-                }
-                Log.i("thread", "1===========" + nickname);
-                result = nickname;
+            if("ONE".equals(getGbn) ) {// 한사람만 가져오기
+
+                result = json.toString();
             }else{
-                //all
+                //all  멤버전체가져오기
                 result = json.toString();
             }
         }
