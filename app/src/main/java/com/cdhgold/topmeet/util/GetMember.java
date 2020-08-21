@@ -25,15 +25,18 @@ public class GetMember implements Callable<String> {
     InputStreamReader isr;
     private Context context;
     private String getGbn = "";
-    public GetMember(Context ctx, String tmp){
+    private String knd = "";
+
+    public GetMember(Context ctx, String tmp, String knd){ // knd - flag값 (회원상세, 기타 )
         this.context = ctx;
-        this.getGbn = tmp;  // (M, F ), ONE 전체가져오기와, 한사람만 가져오기
+        this.getGbn = tmp;  // (M, F ), ONE 전체가져오기와, 한사람만 가져오기, 또는 eml
+        this.knd = knd; // ALL, Detail
     }
     @Override
     public String call() throws Exception {
         String result = ""  ;
-        String DEVICEID = PreferenceManager.getString(context, "DEVICEID");
- Log.i("thread","DEVICEID==========="+DEVICEID);
+        String eml = PreferenceManager.getString(context, "eml");
+ Log.i("thread","eml==========="+eml);
         try {
             URL url = new URL("http://konginfo.co.kr/topbd/topbd/getMem");
 
@@ -47,10 +50,14 @@ public class GetMember implements Callable<String> {
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 
             HashMap<String, String> map = new HashMap<>();
-            if(!"ONE".equals(getGbn)){
+            if(  "ALL".equals(knd)){ // 회원보기 ( 남, 여 )
                 map.put("gender", getGbn);
-            }else{
-                map.put("DEVICEID", DEVICEID);
+            }else if(  "O".equals(knd)){ // 본인정보
+                map.put("eml", eml);
+            }else if( "Detail".equals(knd)){// 상세보기( 선택멤버 )
+                map.put("eml", this.getGbn);
+                map.put("gbn", "detail");
+
             }
 
             StringBuffer sbParams = new StringBuffer();
@@ -58,8 +65,9 @@ public class GetMember implements Callable<String> {
 
             for(String key: map.keySet()){
                 sbParams.append(key).append("=").append(map.get(key));
+                sbParams.append("&");
             }
-            wr.write(sbParams.toString());
+            wr.write(sbParams.substring(0,sbParams.length()-1));
             wr.flush();
             wr.close();
             StringBuffer json = new StringBuffer();
@@ -76,13 +84,7 @@ public class GetMember implements Callable<String> {
             conn.disconnect();
             String nickname = "";
             Log.i("thread","json==========="+json.toString());
-            if("ONE".equals(getGbn) ) {// 한사람만 가져오기
-
-                result = json.toString();
-            }else{
-                //all  멤버전체가져오기
-                result = json.toString();
-            }
+            result = json.toString();
         }
         catch (Exception ex) {
             ex.printStackTrace();

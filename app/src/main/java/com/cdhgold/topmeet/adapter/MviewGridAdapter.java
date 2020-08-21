@@ -30,7 +30,7 @@ public class MviewGridAdapter extends RecyclerView.Adapter<MviewGridAdapter.Memb
     private Context context;
     private MemInterf listener;
     private ImageView imageView;
-    private String deviceid = "";
+    private String eml = "";
     private ArrayList<MemberVo> data;
     private int pos = 0;
     public MviewGridAdapter(Context context, ArrayList<MemberVo> data, MemInterf listener ){
@@ -50,7 +50,7 @@ public class MviewGridAdapter extends RecyclerView.Adapter<MviewGridAdapter.Memb
     public void onBindViewHolder(@NonNull MviewGridAdapter.MembViewHolder membViewHolder, int i) {
         MemberVo vo = data.get(i);
         pos = vo.getSeq() ;
-        deviceid = vo.getDeviceid();
+        eml = vo.geteml();
         String nicknm = vo.getNickname();
         String tamt = vo.getTotItem();  // 총구매금액
         String gender = vo.getGender(); // mg, mm, fg, fm
@@ -100,7 +100,7 @@ public class MviewGridAdapter extends RecyclerView.Adapter<MviewGridAdapter.Memb
         return drawable;
     }
 
-    public class MembViewHolder extends RecyclerView.ViewHolder{
+    public class MembViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView productImage;
         TextView productName;
         TextView productPrice;
@@ -111,20 +111,20 @@ public class MviewGridAdapter extends RecyclerView.Adapter<MviewGridAdapter.Memb
             //notifyItemRangeChanged(0, data.size());
             productImage = itemView.findViewById(R.id.imageView);
             productPrice = itemView.findViewById(R.id.totAmt);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = getAdapterPosition() ;
+            productName = itemView.findViewById(R.id.nickNm);
+            itemView.setOnClickListener(this);
 
-                    if (pos != RecyclerView.NO_POSITION) {
-                        MemberVo vo = data.get(pos);
-                        String deviceid = vo.getDeviceid();
-                        listener.onItemClick(deviceid ); // 상세보기
-                        notifyItemChanged(pos) ;
-                    }
-                }
-            });
+        }
 
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition() ;
+
+            if (pos != RecyclerView.NO_POSITION) {
+                MemberVo vo = data.get(pos);
+                String eml = vo.geteml();
+                listener.onItemClick(eml ); // 상세보기
+            }
         }
     }
 

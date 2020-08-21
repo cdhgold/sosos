@@ -8,6 +8,15 @@ public class ProdVo {
 
     private String prod	        = "";
     private String amt          = "";
+    private String regdt          = "";
+
+    public String getRegdt() {
+        return regdt;
+    }
+
+    public void setRegdt(String regdt) {
+        this.regdt = regdt;
+    }
 
     public String getProd() {
         return prod;

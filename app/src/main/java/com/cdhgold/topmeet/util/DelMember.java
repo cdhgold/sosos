@@ -29,8 +29,8 @@ public class DelMember implements Callable<String> {
     @Override
     public String call() throws Exception {
         String result = ""  ;
-        String DEVICEID = PreferenceManager.getString(context, "DEVICEID"); // pk
-        Log.i("thread","DEVICEID==========="+DEVICEID);
+        String eml = PreferenceManager.getString(context, "eml"); // pk
+        Log.i("thread","eml==========="+eml);
         try {
 
             URL url = new URL("http://konginfo.co.kr/topbd/topbd/makeMem");
@@ -45,7 +45,7 @@ public class DelMember implements Callable<String> {
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(),"UTF8");
 
             HashMap<String, String> map = new HashMap<>();
-            map.put("DEVICEID", DEVICEID);
+            map.put("eml", eml);
 
             StringBuffer sbParams = new StringBuffer();
             boolean isAnd = false;

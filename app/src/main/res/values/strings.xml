@@ -15,7 +15,7 @@
     <string name="age">twenties</string>
     <string name="info">Introduce!</string>
     <string name="hint_mobileNO">휴대폰번호를 입력하세요</string>
-    <string name="hint_email">이메일을 입력하세요</string>
+    <string name="hint_email">Please enter Email!</string>
     <string name="btn_login">로그인</string>
     <string name="btn_register">Membership</string>
     <string name="btn_logout">로그아웃</string>

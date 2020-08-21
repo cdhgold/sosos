@@ -43,7 +43,7 @@ public class MnewFragment extends Fragment  implements View.OnClickListener {
             case R.id.btnMember: // 회원가입
                 // 공지, 회원가입은 100달러입니다. 앱운영은 개인사정상 언제든지 중단될수 있습니다.
                 // 진행하시겠습니까?
-                String alim = "The membership is 100 dollars.\n ";
+                String alim = "The membership is 10 dollars.\n ";
                 alim +=" App operation can be suspended \n at any time  due to personal circumstances.";
                 alim +="\n Would you like to proceed?";
                 new AlertDialog.Builder(getContext())

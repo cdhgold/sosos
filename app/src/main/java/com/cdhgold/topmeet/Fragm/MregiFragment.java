@@ -34,7 +34,7 @@ import java.util.concurrent.FutureTask;
 /*
   신규 회원가입 등록 화면 fragment
   회원가입화면, 남1(mm근육질),남2(mg 일반),
-  여1(fm 글래머),여2(fg 일반), nickname, 연령대(20대,30대,40대,50대,60대,70대 ) , introduce, deviceid
+  여1(fm 글래머),여2(fg 일반), nickname, 연령대(20대,30대,40대,50대,60대,70대 ) , introduce, eml
 
  */
 public class MregiFragment extends Fragment  implements View.OnClickListener, MemInterf {
@@ -45,6 +45,7 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
     ImageView mm  ; // 남성근육질
     ImageView mg  ;// 남성일반
     EditText nickNm ;
+    EditText eml ;      // pk
     RadioGroup age  ;
     EditText info   ;
     Button memIns   ;
@@ -56,6 +57,7 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.member_reg, container, false);
         nickNm = (EditText)view.findViewById(R.id.nickNm);
+        eml = (EditText)view.findViewById(R.id.eml);
         info = (EditText)view.findViewById(R.id.info);
         age = (RadioGroup) view.findViewById(R.id.age);
         age.setOnCheckedChangeListener(radioGroupButtonChangeListener);
@@ -112,12 +114,14 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
         switch (view.getId()) {
 
             case R.id.memIns: // 등록
+                String seml = eml.getText().toString();
                 String nm =  nickNm.getText().toString();
                 String sinfo =  info.getText().toString();
                 PreferenceManager.setString( getContext(),"nickNm", nm);
                 PreferenceManager.setString( getContext(),"info", sinfo);
                 PreferenceManager.setString( getContext(),"age", sage);
                 PreferenceManager.setString( getContext(),"gender", gender);
+                PreferenceManager.setString( getContext(),"eml", seml);
 
                 memIns();
                 break;
@@ -172,7 +176,7 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
                 /*
                     결제 $10 후 화면 이동. oldmember
                 */
-  //BillingManager bill = new BillingManager(getActivity());
+//BillingManager bill = new BillingManager(getActivity());
 //bill.setProd("p_member");
 
                 String inApp = "OK" ;
@@ -236,7 +240,7 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
     }
 
     @Override
-    public void onItemClick(String deviceid) {
+    public void onItemClick(String eml) {
 
     }
 }

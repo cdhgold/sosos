@@ -10,10 +10,19 @@ public class MemberVo {
     private String age          = "";
     private String nickname     = "";
     private String info         = "";
-    private String deviceid      = "";
+    private String eml      = "";
     private String totItem       = ""; // 총합계
+    private String regdt       = ""; // 등록일
 
     private ArrayList<ProdVo> list = null; // item 정보
+
+    public String getRegdt() {
+        return regdt;
+    }
+
+    public void setRegdt(String regdt) {
+        this.regdt = regdt;
+    }
 
     public String getTotItem() {
         return totItem;
@@ -63,12 +72,12 @@ public class MemberVo {
         this.info = info;
     }
 
-    public String getDeviceid() {
-        return deviceid;
+    public String geteml() {
+        return eml;
     }
 
-    public void setDeviceid(String deviceid) {
-        this.deviceid = deviceid;
+    public void seteml(String eml) {
+        this.eml = eml;
     }
 
     public ArrayList<ProdVo> getList() {

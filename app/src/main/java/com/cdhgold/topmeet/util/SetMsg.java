@@ -15,42 +15,31 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 /*
-회원등록
+쪽지보내기 
  */
-public class SetMember implements Callable<String> {
+public class SetMsg implements Callable<String> {
     URL url;
     Document doc = null;
     HttpURLConnection conn;
     InputStreamReader isr;
-    String memGbn = "";             // 등록 IN, 수정 UP
+    String fromEml = "";
+    String eml = "";
+
     private Context context;
-    public SetMember(Context ctx, String gbn ){
+    public SetMsg(Context ctx, String eml ){
         this.context = ctx;
-        this.memGbn = gbn ;
+        this.fromEml = eml ;
     }
     @Override
     public String call() throws Exception {
         String result = ""  ;
-        String eml = PreferenceManager.getString(context, "eml");
-        String nickNm = PreferenceManager.getString(context, "nickNm");
-        String info = PreferenceManager.getString(context, "info");
-        String age = PreferenceManager.getString(context, "age");
-        String gender = PreferenceManager.getString(context, "gender");
-        String pay = "";
+        String msg = PreferenceManager.getString(context, "msg");
 
-        Log.i("thread","eml==========="+eml);
+
+        Log.i("thread","fromEml==========="+fromEml);
         try {
-            if("".equals(nickNm.trim()) || "".equals(info.trim()) ){
-                return "err";
-            }
-            if("NEW".equals(memGbn) ) {
-                url = new URL("http://konginfo.co.kr/topbd/topbd/setMem");
-            }
-            else if("UP".equals(memGbn) ) { // 결제실패시 , 멤버data유지하고, 결제여부만 update ,결제성공 S, 실패 F
-                url = new URL("http://konginfo.co.kr/topbd/topbd/setMemUp");
-                pay = PreferenceManager.getString(context, "pay");
+            url = new URL("http://konginfo.co.kr/topbd/topbd/setMsg");
 
-            }
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Accept-Charset","UTF-8");
@@ -63,11 +52,8 @@ public class SetMember implements Callable<String> {
 
             HashMap<String, String> map = new HashMap<>();
             map.put("eml", eml);
-            map.put("nickNm", nickNm);
-            map.put("info", info);
-            map.put("age", age);
-            map.put("gender", gender);
-            map.put("payment", pay);
+            map.put("msg", msg);
+            map.put("fromEml", fromEml);
 
             StringBuffer sbParams = new StringBuffer();
             boolean isAnd = false;

@@ -13,11 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cdhgold.topmeet.MainActivity;
 import com.cdhgold.topmeet.MemInterf;
 import com.cdhgold.topmeet.R;
 import com.cdhgold.topmeet.adapter.MviewGridAdapter;
 import com.cdhgold.topmeet.util.GetMember;
 import com.cdhgold.topmeet.util.MemberVo;
+import com.cdhgold.topmeet.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +34,7 @@ import java.util.concurrent.FutureTask;
   등록 멤버 보기 화면 ( 남, 여 )
   각 회원별 총구매내역을 보여준다. ( Total item purchase amount
  */
-public class MviewFragment extends Fragment  implements View.OnClickListener, MemInterf {
+public class MviewFragment extends Fragment  implements MemInterf  {
 
     private View view;
     private String memGbn = "";
@@ -50,7 +52,7 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
     private  void showProduct()  {
         // 회원정보를 가져온다. ( M, F )
         String rjson = "";
-        GetMember callable = new GetMember(getContext(),"ALL");
+        GetMember callable = new GetMember(getContext(),this.memGbn,"ALL");
         FutureTask futureTask = new FutureTask(callable);
         Thread thread = new Thread(futureTask);
         thread.start();
@@ -71,15 +73,17 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
 
              for(int i = 0; i< jsonarray.length() ;i ++){
                  JSONObject jsonObj = (JSONObject) jsonarray.get(i);
-                 String deviceid = (String) jsonObj.get("deviceid");
+                 String eml = (String) jsonObj.get("eml");
                  String nickname = (String) jsonObj.get("nickname");
                  String gender = (String) jsonObj.get("gender");
-
-                 Log.d("deviceid  ",deviceid);
+                 String amt = (String) jsonObj.get("amt"); // 총 구매액
+                 amt = Util.getComma(amt);
+                 Log.d("amt  ",amt);
                  MemberVo vo = new MemberVo();
                  vo.setNickname(nickname);
-                 vo.setDeviceid(deviceid);
+                 vo.seteml(eml);
                  vo.setGender(gender);
+                 vo.setTotItem(amt);
                  data.add(vo);
              }
 
@@ -91,29 +95,18 @@ public class MviewFragment extends Fragment  implements View.OnClickListener, Me
 
     }
 
-    @Override
-    public void onClick(View view)
-    {
-        switch (view.getId()) {
-            case R.id.female: // 여성회원보기
-
-                break;
-            case R.id.male: // 남성회원보기
-
-                break;
-            case R.id.item: // 아이템구매
-
-                break;
-        }
-    }
 
     @Override
     public void memDel() {
 
     }
-
+/*
+상세보기로 가기 ( MviewGridAdapter에서 call )
+ */
     @Override
-    public void onItemClick(String deviceid) {
+    public void onItemClick(String eml) {
+        MdetailFragment mdetailFrg = new MdetailFragment(eml);
+        ((MainActivity)getActivity()).replaceFragment(mdetailFrg);
 
     }
 }

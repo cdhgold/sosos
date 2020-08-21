@@ -6,6 +6,7 @@ import android.content.Context;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 
 public class Util {
     public static String md5(String str){
@@ -28,5 +29,56 @@ public class Util {
         builder.setMessage(nm );
 
         builder.show();
+    }
+    public static String getComma(String tmp){
+        String ret = "";
+        DecimalFormat formatter = new DecimalFormat("###,###");
+        ret = "$"+formatter.format(Double.parseDouble(tmp));
+
+        return ret;
+    }
+    /*
+    P01 신발 ,P02 시계  ,P03 반지  ,P04 목걸이 ,P05 자동차 ,P06 책 ,P07 봉사활동  ,P08 채식 ,P09 대중교통이용
+    Shoes.
+    Wristwatch
+    Jewelry
+    Necklace
+    Car
+    Book
+    Volunteer activity
+    Vegetable
+    using public transportation
+     */
+    public static String getItemNm(String tmp){
+        String ret = "";
+        if("P01".equals(tmp)){
+            ret = "Shoes";
+        }
+        else if("P02".equals(tmp)){
+            ret = "Wristwatch";
+        }
+        else if("P03".equals(tmp)){
+            ret = "Jewelry";
+        }
+        else if("P04".equals(tmp)){
+            ret = "Necklace";
+        }
+        else if("P05".equals(tmp)){
+            ret = "Car";
+        }
+        else if("P06".equals(tmp)){
+            ret = "Book";
+        }
+        else if("P07".equals(tmp)){
+            ret = "Volunteer activity";
+        }
+        else if("P08".equals(tmp)){
+            ret = "Vegetable";
+        }
+        else if("P09".equals(tmp)){
+            ret = "using public transportation";
+        }
+
+        return ret;
     }
 }

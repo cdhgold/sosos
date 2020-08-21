@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.cdhgold.topmeet.MainActivity;
 import com.cdhgold.topmeet.R;
+import com.cdhgold.topmeet.util.PreferenceManager;
 
 
 /*
@@ -24,7 +26,15 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
     ImageView fbtn  ;
     ImageView mbtn  ;
     ImageView ibtn  ;
-
+    ImageView myImg ; // 내이미지
+    TextView myNm ; // 내별명
+    TextView myAmt ;    // 내총구매금액
+    String eml = "";
+    String nickname 	= "";
+    String info 	= "";
+    String age 		= "";
+    String gender 	= "";
+    String amt 	= ""; // 총 아이템구매금액
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mem_old, container, false);
@@ -36,7 +46,31 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
         mbtn.setOnClickListener(this);
         ibtn = (ImageView)view.findViewById(R.id.item);     // item 구매
         ibtn.setOnClickListener(this);
+        myImg =   (ImageView)view.findViewById(R.id.myImg);
+        myNm =   (TextView)view.findViewById(R.id.myNm);
+        myAmt =   (TextView)view.findViewById(R.id.myAmt);
+        eml = PreferenceManager.getString(getContext(), "eml");
+        nickname = PreferenceManager.getString(getContext(), "nickname");
+        info = PreferenceManager.getString(getContext(), "info");
+        age = PreferenceManager.getString(getContext(), "age");
+        gender = PreferenceManager.getString(getContext(), "gender");
+        amt = PreferenceManager.getString(getContext(), "amt");
+        amt = amt == null ? "0": amt;
+        myNm.setText(nickname+" ");
+        myAmt.setText(amt);
 
+        if("mg".equals(gender)){
+            myImg.setImageResource(R.drawable.mg);
+        }
+        else if("mm".equals(gender)){
+            myImg.setImageResource(R.drawable.mm);
+        }
+        else if("fg".equals(gender)){
+            myImg.setImageResource(R.drawable.fg);
+        }
+        else if("fm".equals(gender)){
+            myImg.setImageResource(R.drawable.fm);
+        }
         return view;
     }
     @Override
