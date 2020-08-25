@@ -88,7 +88,7 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
             case R.id.item: // 아이템구매
 
 /*
-신발 $100 , 		P01
+신발 $20 , 		P01
 시계 $300, 		P02
 반지 $500, 		P03
 목걸이 $500 		P04
@@ -99,6 +99,8 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
 대중교통이용	 $1	 P09
 
  */
+                ItemFragment item = new ItemFragment();
+                ((MainActivity)getActivity()).replaceFragment(item);
                 break;
         }
     }

@@ -24,6 +24,7 @@ import com.cdhgold.topmeet.adapter.ItemAdapter;
 import com.cdhgold.topmeet.adapter.MviewGridAdapter;
 import com.cdhgold.topmeet.util.GetMember;
 import com.cdhgold.topmeet.util.MemberVo;
+import com.cdhgold.topmeet.util.PreferenceManager;
 import com.cdhgold.topmeet.util.ProdVo;
 import com.cdhgold.topmeet.util.Util;
 
@@ -39,6 +40,7 @@ import java.util.concurrent.FutureTask;
 /*
   멤버 상세보기
   멤버, 아이템 리스트 구매내역
+  쪽지보내기
  */
 public class MdetailFragment extends Fragment  implements View.OnClickListener , MemInterf {
 
@@ -50,12 +52,13 @@ public class MdetailFragment extends Fragment  implements View.OnClickListener ,
     }
     private RecyclerView itemList;
     private ImageView myImg;
-    TextView myNm ;
-    TextView myAge;
-    TextView myAmt;
-    TextView myInfo;
-    TextView myRegdt;
-    ImageButton msgBtn;
+    private String m_eml = ""; // 회원 eml
+    private TextView myNm ;
+    private TextView myAge;
+    private TextView myAmt;
+    private TextView myInfo;
+    private TextView myRegdt;
+    private ImageButton msgBtn;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mem_detail, container, false);
 
@@ -95,7 +98,7 @@ public class MdetailFragment extends Fragment  implements View.OnClickListener ,
              String memJson  = jObject.getString("memb");   // 회원정보
              String itemJson  = jObject.getString("item");  // 아이템구매내역
              JSONObject memObj = new JSONObject(memJson);
-             String m_eml = (String) memObj.get("eml");
+             m_eml = (String) memObj.get("eml");
              String m_gender = (String) memObj.get("gender");
              String m_age = (String) memObj.get("age");
              String m_nickname = (String) memObj.get("nickname");
@@ -173,11 +176,11 @@ public class MdetailFragment extends Fragment  implements View.OnClickListener ,
         switch (view.getId()) {
             case R.id.msgBtn: // 쪽지보내기
                 //eml  MsgActivity
-                String fromEml = ""; // 보내는사람 , 나
+                String fromEml = PreferenceManager.getString(getContext(), "fromEml");; // 보내는사람 , 나
                 Intent intent = new Intent(getContext(), MsgActivity.class);
 
-                intent.putExtra("eml",eml); /* 받는사람 eml */
-                intent.putExtra("fromEml",fromEml);
+                intent.putExtra("eml",m_eml);        /* 받는사람 eml */
+                intent.putExtra("fromEml",fromEml);  /* 앱 로긴한 사람 */
 
                 startActivity(intent);
                 break;

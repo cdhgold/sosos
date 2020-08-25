@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 
 public class Util {
+    // 암호화
     public static String md5(String str){
         String MD5 = "";
         try{
@@ -70,7 +71,7 @@ public class Util {
             ret = "Book";
         }
         else if("P07".equals(tmp)){
-            ret = "Volunteer activity";
+            ret = "Volunteer";
         }
         else if("P08".equals(tmp)){
             ret = "Vegetable";

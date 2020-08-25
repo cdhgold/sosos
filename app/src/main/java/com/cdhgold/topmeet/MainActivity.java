@@ -86,18 +86,22 @@ public class MainActivity extends AppCompatActivity  implements MemInterf  {
         transaction = fragmentManager.beginTransaction();
 
         // 결제가 안됐으면 , 회원결재창으로 이동...
-        String nickname = "",payment = "",amt = "";
+        String nickname = "",payment = "",amt = "" ;
         if (!"null".equals(ret) && !"".equals(ret)) {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(ret);
+                    eml = jsonObject.getString("eml");
                     nickname = jsonObject.getString("nickname");
                     payment = jsonObject.getString("payment"); // F 면 결재창으로
                     amt = jsonObject.getString("amt"); //
                     amt = Util.getComma(amt);
+
                     PreferenceManager.setString(getApplicationContext() , "amt",amt);
                     PreferenceManager.setString(getApplicationContext() , "nickname",nickname);
                     PreferenceManager.setString(getApplicationContext() , "payment",payment);
+                    PreferenceManager.setString(getApplicationContext() , "fromEml",eml);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -121,11 +121,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return drawable;
     }
 /*
-    Shoes.                      신발 $100  P01
-    Wristwatch                  시계 $300  P02
-    Jewelry                     반지 $500  P03
-    Necklace                    목걸이 $500 P04
-    Car                         자동차 $1000 P05
+    Shoes.                      신발 $2  P01
+    Wristwatch                  시계 $30  P02
+    Jewelry                     반지 $50  P03
+    Necklace                    목걸이 $50 P04
+    Car                         자동차 $100 P05
     Book                        책 $1 P06
     Volunteer activity          봉사활동 $1 P07
     Vegetable                   채식 $1  P08

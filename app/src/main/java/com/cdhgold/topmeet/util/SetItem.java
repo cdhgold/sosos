@@ -15,32 +15,53 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 /*
-쪽지보내기 
+item 구매
  */
-public class SetMsg implements Callable<String> {
+public class SetItem implements Callable<String> {
     URL url;
     Document doc = null;
     HttpURLConnection conn;
     InputStreamReader isr;
-    String fromEml = "";
+    String item = "";
+    String nickname = "";
     String eml = "";
-    String msg = "";
+    String amt = ""; // item 금액 ( $ )
 
     private Context context;
-    public SetMsg(Context ctx, String msg,String eml ,String fromEml  ){
+    public SetItem(Context ctx, String item   ){
         this.context = ctx;
-        this.msg = msg ;
-        this.fromEml = fromEml ;
-        this.eml = eml ;
+        this.item = item ; // 상품id
+        nickname = PreferenceManager.getString(ctx,"nickname");
+        eml = PreferenceManager.getString(ctx,"eml");
+        if("p01".equals(item)){
+            amt =  "20"; // 신발
+        }
+        else if("p02".equals(item)){
+            amt =  "30"; // 시계
+        }
+        else if("p02".equals(item)){
+            amt =  "30"; // 시계
+        }
+        else if("p03".equals(item) || "p04".equals(item)){
+            amt =  "50"; // 반지, 목걸이
+        }
+        else if("p05".equals(item)){
+            amt =  "100"; // 자동차
+        }
+        else  {
+            amt =  "1"; // 책,봉사활동,채식,대중교통이용
+        }
+
+
 
     }
     @Override
     public String call() throws Exception {
         String result = ""  ;
 
-        Log.i("thread","fromEml==========="+fromEml);
+        Log.i("thread","item==========="+item);
         try {
-            url = new URL("http://konginfo.co.kr/topbd/topbd/setMsg");
+            url = new URL("http://konginfo.co.kr/topbd/topbd/setItem");
 
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -53,9 +74,10 @@ public class SetMsg implements Callable<String> {
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(),"UTF8");
 
             HashMap<String, String> map = new HashMap<>();
+            map.put("prod", item);
+            map.put("nickname", nickname);
             map.put("eml", eml);
-            map.put("msg", msg);
-            map.put("fromEml", fromEml);
+            map.put("amt", amt);
 
             StringBuffer sbParams = new StringBuffer();
             boolean isAnd = false;

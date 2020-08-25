@@ -28,7 +28,7 @@ import java.util.concurrent.FutureTask;
 
 
 /*
-  email check 화면
+  email( pk )  check 화면
   앱 시작시 email (PreferenceManager)  여부에따라 화면표시,
  */
 public class MemlFragment extends Fragment  implements View.OnClickListener {
