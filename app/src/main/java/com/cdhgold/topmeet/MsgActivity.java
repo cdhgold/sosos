@@ -24,6 +24,7 @@ public class MsgActivity extends Activity  implements View.OnClickListener{
     private Button btnSnd;
     String eml = "";
     String fromEml = "";
+    String nicknm = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MsgActivity extends Activity  implements View.OnClickListener{
         Intent intent = getIntent();
         eml = intent.getExtras().getString("eml");
         fromEml = intent.getExtras().getString("fromEml");
+        nicknm = intent.getExtras().getString("nicknm");
     }
 
     @Override
@@ -50,7 +52,7 @@ public class MsgActivity extends Activity  implements View.OnClickListener{
                     Util.showAlim("Please Input Message!",this);
                     return;
                 }else{
-                    SetMsg callable = new SetMsg(this, smsg,eml,fromEml);
+                    SetMsg callable = new SetMsg(this, smsg,eml,fromEml,nicknm);
                     FutureTask futureTask = new FutureTask(callable);
                     Thread thread = new Thread(futureTask);
                     thread.start();

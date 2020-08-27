@@ -35,7 +35,8 @@ import java.util.concurrent.FutureTask;
   신규 회원가입 등록 화면 fragment
   회원가입화면, 남1(mm근육질),남2(mg 일반),
   여1(fm 글래머),여2(fg 일반), nickname, 연령대(20대,30대,40대,50대,60대,70대 ) , introduce, eml
-
+   가입전 :
+   회원 counting : 100명 미만일때만 가입가능
  */
 public class MregiFragment extends Fragment  implements View.OnClickListener, MemInterf {
 
@@ -176,11 +177,11 @@ public class MregiFragment extends Fragment  implements View.OnClickListener, Me
                 /*
                     결제 $10 후 화면 이동. oldmember
                 */
-//BillingManager bill = new BillingManager(getActivity());
-//bill.setProd("p_member");
+                BillingManager bill = new BillingManager(getActivity());
+                bill.setProd("p_member");
 
                 String inApp = "OK" ;
-                //inApp = PreferenceManager.getString(getContext(), "inApp");
+                inApp = PreferenceManager.getString(getContext(), "inApp");
                 if(!"OK".equals(inApp)){// 회원등록 : 결제실패시 등록취소
                     // 결제실패 update
                     PreferenceManager.setString(getContext(), "pay","F");

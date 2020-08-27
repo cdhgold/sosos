@@ -52,9 +52,7 @@ public class ItemFragment extends Fragment  implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.item_main, container, false);
 
-        //아이템구매 버튼
-        itemBtn = (ImageButton)view.findViewById(R.id.itemBtn);
-        itemBtn.setOnClickListener(this);
+        //아이템구매
         p01 = (ImageView)view.findViewById(R.id.prod01);
         p01.setOnClickListener(this);
         p02 = (ImageView)view.findViewById(R.id.prod02);

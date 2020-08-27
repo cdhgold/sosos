@@ -86,39 +86,53 @@ public class MainActivity extends AppCompatActivity  implements MemInterf  {
         transaction = fragmentManager.beginTransaction();
 
         // 결제가 안됐으면 , 회원결재창으로 이동...
-        String nickname = "",payment = "",amt = "" ;
+        String nickname = "",payment = "",amt = "" ,mcnt = "";
+        JSONObject jsonObject = null;
         if (!"null".equals(ret) && !"".equals(ret)) {
-                JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(ret);
-                    eml = jsonObject.getString("eml");
-                    nickname = jsonObject.getString("nickname");
-                    payment = jsonObject.getString("payment"); // F 면 결재창으로
-                    amt = jsonObject.getString("amt"); //
+                    String memJson  = jsonObject.getString("memb");         // 회원정보
+                    String totmembJson  = jsonObject.getString("totmemb");  // 회원총수
+                    JSONObject memObj = new JSONObject(memJson);
+                    JSONObject cntObj = new JSONObject(totmembJson);
+
+
+                    mcnt = cntObj.getString("mcnt"); // 회원가입총수
+                    eml = memObj.getString("eml");
+                    PreferenceManager.setString(getApplicationContext() , "mcnt",mcnt); // 회원총수
+                    if("null".equals(mcnt) || "null".equals(eml) ){ // 신규화면으로
+                        replaceFragmentThread(newmember);
+                        return;
+                    }
+
+                    nickname = memObj.getString("nickname");
+                    payment = memObj.getString("payment"); // F 면 결재창으로
+                    amt = memObj.getString("amt"); //
                     amt = Util.getComma(amt);
 
                     PreferenceManager.setString(getApplicationContext() , "amt",amt);
                     PreferenceManager.setString(getApplicationContext() , "nickname",nickname);
                     PreferenceManager.setString(getApplicationContext() , "payment",payment);
-                    PreferenceManager.setString(getApplicationContext() , "fromEml",eml);
+                    PreferenceManager.setString(getApplicationContext() , "fromEml",eml); // 내이메일 주소
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
 
-            Log.i("thread", "1===========" + nickname);
+            Log.i("thread", "members ===========" + mcnt);
+                // mcnt 100 명이면 화면진입금지
             if(!"".equals(nickname) && "S".equals(payment) ) {
-                replaceFragmentThread(oldmember);
+                replaceFragmentThread(oldmember); // 맴버화면
             }
             else if(!"".equals(nickname) && "F".equals(payment) ) { // 회비결제화면으로
                 replaceFragmentThread(paymFrg);
             }else{
                 //회원결재창
-                //BillingManager bill = new BillingManager(this);
-                //bill.setProd("p_member");
+                BillingManager bill = new BillingManager(this);
+                bill.setProd("p_member");
                 String inApp = "OK";
-//inApp = PreferenceManager.getString(getContext(), "inApp");
+                inApp = PreferenceManager.getString(this, "inApp");
                 if("OK".equals(inApp)) {// 회원등록 : 결제성공시
                     replaceFragmentThread(oldmember);
                 }

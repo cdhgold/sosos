@@ -177,10 +177,13 @@ public class MdetailFragment extends Fragment  implements View.OnClickListener ,
             case R.id.msgBtn: // 쪽지보내기
                 //eml  MsgActivity
                 String fromEml = PreferenceManager.getString(getContext(), "fromEml");; // 보내는사람 , 나
+                String nickname = PreferenceManager.getString(getContext(), "nickname");;
+
                 Intent intent = new Intent(getContext(), MsgActivity.class);
 
                 intent.putExtra("eml",m_eml);        /* 받는사람 eml */
                 intent.putExtra("fromEml",fromEml);  /* 앱 로긴한 사람 */
+                intent.putExtra("nicknm",nickname);
 
                 startActivity(intent);
                 break;

@@ -26,16 +26,18 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
     ImageView fbtn  ;
     ImageView mbtn  ;
     ImageView ibtn  ;
-    ImageView myImg ; // 내이미지
-    TextView myNm ; // 내별명
+    ImageView msg  ;    // 내쪽지보기
+    ImageView myImg ;   // 내이미지
+    TextView myNm ;     // 내별명
     TextView myAmt ;    // 내총구매금액
+    TextView numOfMemb ;    // 멤버 총인원
     String eml = "";
     String nickname 	= "";
     String info 	= "";
     String age 		= "";
     String gender 	= "";
     String amt 	= ""; // 총 아이템구매금액
-
+    String mcnt = "Members : "; //멤버총수
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mem_old, container, false);
 
@@ -46,9 +48,12 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
         mbtn.setOnClickListener(this);
         ibtn = (ImageView)view.findViewById(R.id.item);     // item 구매
         ibtn.setOnClickListener(this);
+        msg = (ImageView)view.findViewById(R.id.msg);     // 쪽지보기
+        msg.setOnClickListener(this);
         myImg =   (ImageView)view.findViewById(R.id.myImg);
         myNm =   (TextView)view.findViewById(R.id.myNm);
         myAmt =   (TextView)view.findViewById(R.id.myAmt);
+        numOfMemb =   (TextView)view.findViewById(R.id.numOfMemb);  // 맴버 총수
         eml = PreferenceManager.getString(getContext(), "eml");
         nickname = PreferenceManager.getString(getContext(), "nickname");
         info = PreferenceManager.getString(getContext(), "info");
@@ -58,7 +63,8 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
         amt = amt == null ? "0": amt;
         myNm.setText(nickname+" ");
         myAmt.setText(amt);
-
+        String tmcnt = PreferenceManager.getString(getContext(), "mcnt");
+        numOfMemb.setText(mcnt+tmcnt);        // 멤버총수
         if("mg".equals(gender)){
             myImg.setImageResource(R.drawable.mg);
         }
@@ -84,6 +90,10 @@ public class MoldFragment extends Fragment  implements View.OnClickListener {
             case R.id.male: // 남성회원보기
                 MviewFragment mview = new MviewFragment("M");
                 ((MainActivity)getActivity()).replaceFragment(mview);
+                break;
+            case R.id.msg: //  내쪽지보기
+                MsgFragment msgview = new MsgFragment();
+                ((MainActivity)getActivity()).replaceFragment(msgview);
                 break;
             case R.id.item: // 아이템구매
 

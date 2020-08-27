@@ -28,8 +28,10 @@ public class Util {
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle("Top1%");
         builder.setMessage(nm );
-
-        builder.show();
+        AlertDialog ad = builder.create();
+        ad.show();
+        //ad.dismiss();
+        //builder.show();
     }
     public static String getComma(String tmp){
         String ret = "";
