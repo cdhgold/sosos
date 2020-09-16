@@ -28,4 +28,10 @@
         android:name="com.cdhgold.carwash.ui.notifications.MapFrg"
         android:label="오시는길"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/info"
+        android:name="com.cdhgold.carwash.ui.notifications.InfoFrg"
+        android:label="갤러리"
+        tools:layout="@layout/info" />
+
 </navigation>
