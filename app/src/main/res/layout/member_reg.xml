@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/side_nav_bar1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -17,56 +16,39 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin" >
-
             <ImageView
-                android:id="@+id/fm"
+                android:id="@+id/kid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:src="@drawable/fm" />
-
+                android:background="@drawable/kids" />
             <ImageView
-                android:id="@+id/fg"
+                android:id="@+id/fkid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:src="@drawable/fg" />
+                android:background="@drawable/fkids" />
+
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin">
-
-            <ImageView
-                android:id="@+id/mm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:src="@drawable/mm" />
-
-            <ImageView
-                android:id="@+id/mg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:src="@drawable/mg" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:background="@drawable/side_nav_bar1"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/memIns"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:background="#ea4c88"
+                android:text="@string/btn_register"
+                android:textColor="@color/white" />
+
             <EditText
                 android:id="@+id/eml"
                 android:layout_width="fill_parent"
@@ -95,7 +77,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-
+                <RadioButton
+                    android:id="@+id/a10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="age:10~" />
                 <RadioButton
                     android:id="@+id/a20"
                     android:layout_width="wrap_content"
@@ -141,14 +127,6 @@
                 android:textColorHint="@color/input_register_hint"
                 android:inputType="textMultiLine"/>
 
-            <Button
-                android:id="@+id/memIns"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:background="#ea4c88"
-                android:text="@string/btn_register"
-                android:textColor="@color/white" />
 
         </LinearLayout>
     </LinearLayout>

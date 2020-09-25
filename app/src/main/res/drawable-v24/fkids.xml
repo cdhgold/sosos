@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/k01" android:duration="200" />
+    <item android:drawable="@drawable/k09" android:duration="200" />
+    <item android:drawable="@drawable/k13" android:duration="200" />
+    <item android:drawable="@drawable/k14" android:duration="200" />
+    <item android:drawable="@drawable/k15" android:duration="200" />
+    <item android:drawable="@drawable/k21" android:duration="200" />
+    <item android:drawable="@drawable/k23" android:duration="200" />
+    <item android:drawable="@drawable/k26" android:duration="200" />
+    <item android:drawable="@drawable/k28" android:duration="200" />
+    <item android:drawable="@drawable/k29" android:duration="200" />
+    <item android:drawable="@drawable/k31" android:duration="200" />
+    <item android:drawable="@drawable/k32" android:duration="200" />
+    <item android:drawable="@drawable/k33" android:duration="200" />
+    <item android:drawable="@drawable/k34" android:duration="200" />
+    <item android:drawable="@drawable/k35" android:duration="200" />
+    <item android:drawable="@drawable/k36" android:duration="200" />
+    <item android:drawable="@drawable/k41" android:duration="200" />
+    <item android:drawable="@drawable/k43" android:duration="200" />
+    <item android:drawable="@drawable/k44" android:duration="200" />
+    <item android:drawable="@drawable/k45" android:duration="200" />
+    <item android:drawable="@drawable/k49" android:duration="200" />
+    <item android:drawable="@drawable/k51" android:duration="200" />
+    <item android:drawable="@drawable/k53" android:duration="200" />
+    <item android:drawable="@drawable/k55" android:duration="200" />
+    <item android:drawable="@drawable/k56" android:duration="200" />
+    <item android:drawable="@drawable/k60" android:duration="200" />
+
+
+</animation-list>
