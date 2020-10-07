@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
@@ -71,12 +75,12 @@
 
         <ImageView
             android:id="@+id/female"
-            android:layout_width="143dp"
-            android:layout_height="141dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
 
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
             android:layout_weight="1"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:scaleType="fitXY"
@@ -86,52 +90,50 @@
 
         <ImageView
             android:id="@+id/male"
-            android:layout_width="143dp"
-            android:layout_height="141dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="96dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="44dp"
             android:layout_weight="1"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:scaleType="fitXY"
             android:src="@drawable/males"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/female"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.047"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/female" />
 
         <ImageView
             android:id="@+id/item"
-            android:layout_width="127dp"
-            android:layout_height="137dp"
+            android:layout_width="69dp"
+            android:layout_height="73dp"
 
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginStart="44dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/item"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/female"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@+id/msg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.078" />
 
         <ImageView
             android:id="@+id/msg"
-            android:layout_width="127dp"
-            android:layout_height="137dp"
+            android:layout_width="74dp"
+            android:layout_height="70dp"
 
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/msg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.369"
-            app:layout_constraintStart_toEndOf="@+id/item"
-            app:layout_constraintTop_toBottomOf="@+id/male"
-            app:layout_constraintVertical_bias="0.518" />
+            app:layout_constraintHorizontal_bias="0.238"
+            app:layout_constraintStart_toEndOf="@+id/female"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.078" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
+</ScrollView>
