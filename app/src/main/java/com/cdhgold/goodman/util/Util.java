@@ -41,45 +41,80 @@ public class Util {
         return ret;
     }
     /*
-    P01 신발 ,P02 시계  ,P03 반지  ,P04 목걸이 ,P05 자동차 ,P06 책 ,P07 봉사활동  ,P08 채식 ,P09 대중교통이용
-    Shoes.
-    Wristwatch
-    Jewelry
-    Necklace
-    Car
-    Book
-    Volunteer activity
-    Vegetable
-    using public transportation
+    1 Do it yourself		 	60
+        2 helping parents         100
+        3 No cursing               100
+        4 Volunteer activity      90
+        5 Use of public transportation     80
+        6 Reading books           80
+        7 Vegetable               60
+        8 Exercise                80
+        9 helping others          100
+        10  To curse                -70
+        11  To torment              -100
+        12  Cigarette               -60
+        13  Alcohol                 -60
+        14  Drug                    -100
+        15  a meat diet             -60
+        16  Fight                   -100
+        17  a bad idea              -60
+        18  Discrimination          -80
      */
     public static String getItemNm(String tmp){
         String ret = "";
-        if("P01".equals(tmp)){
-            ret = "Shoes";
+        if("p01".equals(tmp)){
+            ret = "Do it yourself";
         }
-        else if("P02".equals(tmp)){
-            ret = "Wristwatch";
+        else if("p02".equals(tmp)){
+            ret = "Helping parents";
         }
-        else if("P03".equals(tmp)){
-            ret = "Jewelry";
+        else if("p03".equals(tmp)){
+            ret = "No cursing";
         }
-        else if("P04".equals(tmp)){
-            ret = "Necklace";
+        else if("p04".equals(tmp)){
+            ret = "Volunteer activity";
         }
-        else if("P05".equals(tmp)){
-            ret = "Car";
+        else if("p05".equals(tmp)){
+            ret = "Use of public transportation";
         }
-        else if("P06".equals(tmp)){
-            ret = "Book";
+        else if("p06".equals(tmp)){
+            ret = "Reading books";
         }
-        else if("P07".equals(tmp)){
-            ret = "Volunteer";
-        }
-        else if("P08".equals(tmp)){
+        else if("p07".equals(tmp)){
             ret = "Vegetable";
         }
-        else if("P09".equals(tmp)){
-            ret = "using public transportation";
+        else if("p08".equals(tmp)){
+            ret = "Exercise";
+        }
+        else if("p09".equals(tmp)){
+            ret = "Helping others";
+        }
+        else if("p10".equals(tmp)){
+            ret = "To curse";
+        }
+        else if("p11".equals(tmp)){
+            ret = "To torment";
+        }
+        else if("p12".equals(tmp)){
+            ret = "Cigarette";
+        }
+        else if("p13".equals(tmp)){
+            ret = "Alcohol";
+        }
+        else if("p14".equals(tmp)){
+            ret = "Drug";
+        }
+        else if("p15".equals(tmp)){
+            ret = "a meat diet";
+        }
+        else if("p16".equals(tmp)){
+            ret = "Fight";
+        }
+        else if("p17".equals(tmp)){
+            ret = "a bad idea";
+        }
+        else if("p18".equals(tmp)){
+            ret = "Discrimination";
         }
 
         return ret;

@@ -74,17 +74,19 @@
         <ImageView
             android:id="@+id/female"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:scaleType="fitXY"
             android:src="@drawable/females" />
 
         <ImageView
             android:id="@+id/male"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
             android:layout_weight="1"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:src="@drawable/males" />
@@ -94,17 +96,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/item"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/item" />
+
         <ImageView
             android:id="@+id/msg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/msg" />

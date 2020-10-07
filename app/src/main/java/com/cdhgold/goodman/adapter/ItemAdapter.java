@@ -57,37 +57,83 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         String prod = vo.getProd(); // 이미지로 표현
         String regdt = vo.getRegdt();
         String prodNm = "";
-//P01 신발 ,P02 시계  ,P03 반지  ,P04 목걸이 ,P05 자동차 ,P06 책 ,P07 봉사활동  ,P08 채식 ,P09 대중교통이용
+        /*
+        1 Do it yourself		 	60
+        2 helping parents         100
+        3 No cursing               100
+        4 Volunteer activity      90
+        5 Use of public transportation     80
+        6 Reading books           80
+        7 Vegetable               60
+        8 Exercise                80
+        9 helping others          100
+        10  To curse                -70
+        11  To torment              -100
+        12  Cigarette               -60
+        13  Alcohol                 -60
+        14  Drug                    -100
+        15  a meat diet             -60
+        16  Fight                   -100
+        17  a bad idea              -60
+        18  Discrimination          -80
+*/
         ItemViewHolder.productPrice.setText(amt);
         prodNm = Util.getItemNm(prod);
         ItemViewHolder.productName.setText(prodNm);
         ItemViewHolder.productRegdt.setText(regdt);
-        if("P01".equals(prod)){
+        if("p01".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p01);
         }
-        else if("P02".equals(prod)){
+        else if("p02".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p02);
         }
-        else if("P03".equals(prod)){
+        else if("p03".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p03);
         }
-        else if("P04".equals(prod)){
+        else if("p04".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p04);
         }
-        else if("P05".equals(prod)){
+        else if("p05".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p05);
         }
-        else if("P06".equals(prod)){
+        else if("p06".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p06);
         }
-        else if("P07".equals(prod)){
+        else if("p07".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p07);
         }
-        else if("P08".equals(prod)){
+        else if("p08".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p08);
         }
-        else if("P09".equals(prod)){
+        else if("p09".equals(prod)){
             ItemViewHolder.prodImg.setImageResource(R.drawable.p09);
+        }
+        else if("p10".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p10);
+        }
+        else if("p11".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p11);
+        }
+        else if("p12".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p12);
+        }
+        else if("p13".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p13);
+        }
+        else if("p14".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p14);
+        }
+        else if("p15".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p15);
+        }
+        else if("p16".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p16);
+        }
+        else if("p17".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p17);
+        }
+        else if("p18".equals(prod)){
+            ItemViewHolder.prodImg.setImageResource(R.drawable.p18);
         }
 
     }

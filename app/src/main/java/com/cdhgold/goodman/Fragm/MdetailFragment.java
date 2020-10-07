@@ -121,15 +121,24 @@ public class MdetailFragment extends Fragment  implements View.OnClickListener ,
             data.setRegdt(m_regdt);
              JSONArray jsonarray = new JSONArray(itemJson); // 아이템 배열 prod , amt , regdt
                 /*
-                신발 $100 , 		P01
-                시계 $300, 		    P02
-                반지 $500, 		    P03
-                목걸이 $500 		    P04
-                자동차 $1000 		P05
-                책 $1			    P06
-                봉사활동 $1		    P07
-                채식		 $1	    P08
-                대중교통이용	 $1	    P09
+                1 Do it yourself		 	60
+                2 helping parents         100
+                3 No cursing               100
+                4 Volunteer activity      90
+                5 Use of public transportation     80
+                6 Reading books           80
+                7 Vegetable               60
+                8 Exercise                80
+                9 helping others          100
+                10  To curse                -70
+                11  To torment              -100
+                12  Cigarette               -60
+                13  Alcohol                 -60
+                14  Drug                    -100
+                15  a meat diet             -60
+                16  Fight                   -100
+                17  a bad idea              -60
+                18  Discrimination          -80
 
                  */
 
